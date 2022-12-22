@@ -4,20 +4,20 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\preparation_tache>
- */
+use \App\Models\preparationTache;
+use \App\Models\preparationBrief;
+
 class PreparationTacheFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model=preparationTache::class;
     public function definition()
     {
+        $preparationBrief =preparationBrief::all()->pluck('id')->toArray();
         return [
-            //
+            "Nom_tache"=>$this->faker->name(),
+            "Description"=>$this->faker->word(),
+            "Duree"=>$this->faker->dateTime(),
+            "Preparation_brief_id"=>$this->faker->randomElement($preparationBrief),
         ];
     }
 }

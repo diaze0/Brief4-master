@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\groupes;
+use App\Models\groupe;
 use App\Models\formateur;
-use App\Models\groupes_apprenant;
+use App\Models\GroupeApprenant;
 use Illuminate\Support\Facades\DB;
-use App\Models\apprenant_preparation_tach;
+use App\Models\ApprenantPreparationTache;
 
 
 class DashboardController extends Controller
 {
+    // get tous formateur
     function  formateur(){
-        $Groupes = formateur::All();
-        return $Groupes ;
+        $formateur = formateur::All();
+        return $formateur ;
     }
 
 
@@ -22,15 +23,14 @@ class DashboardController extends Controller
     function Groupe($id){
 
 // get dernier Groupe
-        $Groupes = groupes::select("*","groupes.id as idGroupe")
+        $Groupes = groupe::select("*","groupes.id as idGroupe")
         ->where('Formateur_id',$id)
         ->join('formateur', 'groupes.Formateur_id', '=', 'formateur.id')
         ->join('annee_formation', 'groupes.Annee_formation_id', '=', 'annee_formation.id')
-        ->orderBy('annee_formation.Annee_scolaire','desc')
+        ->orderBy('annee_formation.id','desc')
         ->first();
-
  // get dernier Brief
-        $IdBrief= apprenant_preparation_tach::select(
+        $IdBrief= ApprenantPreparationTache::select(
             "preparation_brief.Nom_du_brief",'preparation_brief.id as id' ,
             )
             ->join('apprenant', 'apprenant_preparation_tache.Apprenant_id', '=','apprenant.id')
@@ -47,7 +47,7 @@ class DashboardController extends Controller
                 ->first();
 
 // Toutal des apprenants
-         $CountAppenants = groupes_apprenant::select("*")
+         $CountApprenants = GroupeApprenant::select("*")
         ->where([
             ['Formateur_id',$id],
             ['groupes_apprenant.Groupe_id',$Groupes->idGroupe]
@@ -58,7 +58,7 @@ class DashboardController extends Controller
             ->count();
 
 // list des apprenant
-            $GetAppenants = groupes_apprenant::select("*")
+            $GetAppenants = GroupeApprenant::select("*")
             ->where([
             ['Formateur_id',$id],
             ['groupes_apprenant.Groupe_id',$Groupes->idGroupe]
@@ -68,9 +68,8 @@ class DashboardController extends Controller
             ->join('apprenant', 'groupes_apprenant.Apprenant_id', '=', 'apprenant.id')
             ->get();
 
-
 // Avancement de dernier groupe
-        $AvancementGroupe= apprenant_preparation_tach::select(
+        $AvancementGroupe= ApprenantPreparationTache::select(
         DB::raw(" 100 / count('apprenant_preparation_tache')   * count(CASE Etat WHEN 'terminer' THEN 1 ELSE NULL END) as Percentage"),
         )
         ->join('apprenant', 'apprenant_preparation_tache.Apprenant_id', '=','apprenant.id')
@@ -88,8 +87,9 @@ class DashboardController extends Controller
 
 
 
+
 //list des briefs
-                 $listBrief= apprenant_preparation_tach::select(
+                 $listBrief= ApprenantPreparationTache::select(
 
                     "preparation_brief.Nom_du_brief",'preparation_brief.id as id' ,
                     DB::raw(" 100 / count('apprenant_preparation_tache.Etat')   * count(CASE Etat WHEN 'terminer' THEN 1 ELSE NULL END) as Percentage"),
@@ -109,10 +109,11 @@ class DashboardController extends Controller
                     ->groupBy("preparation_brief.id")
                     ->orderBy('preparation_brief.id','desc')
                         ->get();
+// dd($listBrief);
 
-//get first brief
-            $FirstBrief= apprenant_preparation_tach::select(
-                    "apprenant.Nom",
+//get dernier  brief
+            $LastBrief= ApprenantPreparationTache::select(
+                    "apprenant.Nom","apprenant.Prenom",
                     "preparation_brief.Nom_du_brief",'preparation_brief.id as id' ,
                     DB::raw(" 100 / count('apprenant_preparation_tache.Etat')   * count(CASE Etat WHEN 'terminer' THEN 1 ELSE NULL END) as Percentage"),
                     )
@@ -129,11 +130,14 @@ class DashboardController extends Controller
 
                         ])
                     ->groupBy("Nom_du_brief")
+                    ->groupBy("Prenom")
                     ->groupBy("Nom")
                     ->groupBy("preparation_brief.id")
                     ->orderBy('preparation_brief.id','desc')
 
                         ->get();
+
+// dd($LastBrief);
 
                     //     return response()->json([
                     //         'Groupes' =>$Groupes
@@ -141,20 +145,21 @@ class DashboardController extends Controller
                     // }
                     return  response()->json([
                        'Groupe'=> $Groupes,
-                       "ToutalApprenants"=> $CountAppenants,
+                       "ToutalApprenants"=> $CountApprenants,
                        "ListApprenants"=> $GetAppenants,
                         "AvancementGroupe"=>$AvancementGroupe,
-                       "ListBrifes"=> $listBrief,
-                        "FirstBrief"=>$FirstBrief
+                       "ListBriefs"=> $listBrief,
+                        "LastBrief"=>$LastBrief
                     ]);
+
             }
 
 // Avancement des Apprenant
-         function Av_ApprenantTache($idG,$idB){
+         function BriefSelect($idG,$idB){
 
-            $BriefAV= apprenant_preparation_tach::select(
+            $BriefAvancement= ApprenantPreparationTache::select(
 
-                "apprenant.Nom",
+                "apprenant.Nom","apprenant.Prenom",
                 DB::raw(" 100 / count('apprenant_preparation_tache.Etat')   * count(CASE Etat WHEN 'terminer' THEN 1 ELSE NULL END) as Percentage"),
 
                 )
@@ -170,10 +175,14 @@ class DashboardController extends Controller
                 ['preparation_brief.id',$idB]
             ])
             ->groupBy('Nom')
+            ->groupBy('Prenom')
             ->get()
             ;
 
 
-            return response()->json(["avancemantBrief"=> $BriefAV]);
-    }
+            return response()->json(["avancemantBrief"=> $BriefAvancement]);
+
+
+
+}
 }

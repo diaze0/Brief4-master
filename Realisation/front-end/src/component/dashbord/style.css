@@ -1,0 +1,109 @@
+
+#color{
+    background-color: blueviolet;
+}
+#Brand{
+    font-size: 15px;
+    color: rgb(7, 39, 53);
+    font-weight: bold;
+}
+#size{
+    background-color: rgba(136, 142, 147, 0.783);
+    border-radius: 10px;
+ 
+}
+#cadreGroupe{
+    padding:19px;
+    margin:19px;
+    border:4px solid rgb(17, 70, 95) ;
+    border-radius:5px;
+    width: 500px;
+}
+#cadreBrief{
+    height: 197px;
+    padding: 19px;
+    /* margin: 19px; */
+    border: 4px solid rgb(17, 70, 95);
+    border-radius: 5px;
+    width: 500px;
+    margin-top: -216px;
+    margin-left: 30px;
+}
+#cadreApprenant{
+    padding:19px;
+    margin:19px;
+    border:4px solid rgb(17, 70, 95) ;
+    border-radius:5px;
+    width: 500px;
+    margin-left: -104px;
+    padding-top: 20px;
+    height: 428px;
+}
+#titreBrief{
+    margin-top: -18px;
+    color: rgb(24, 77, 101);
+}
+#titreGroupe{
+    margin-top: -18px;
+    color: rgb(24, 77, 101);
+}
+#titreApprenant{
+    margin-top: -18px;
+    color: rgb(24, 77, 101);
+}
+#titre-tableau{
+    margin-top: 14px;
+    margin-left: 511px;
+    color: rgb(24, 77, 101);
+    font-weight: bold;
+}
+
+
+#tout{
+    margin-right: 20px;
+}
+
+#select{
+    background-color: rgb(7, 45, 83);
+    color: azure;
+    border:2px solid rgb(17, 70, 95) ;
+    border-radius:5px;
+    width: 100px;
+    text-align: center;
+}
+#DivChart{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+#DivChart-App{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+#ChartBrief{
+    width: 400px;
+   
+}
+#ChartApprenant{
+    width: 300px;
+
+}
+.progress-bar{
+    background-color:rgb(50, 9, 104) 
+}
+.progress-App{
+    background-color:rgb(141, 65, 153) ;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+#selecet{
+    margin-top: 20px;
+    margin: 20px;
+}
+
+img{
+    border-radius: 300px;
+    width: 65px;
+}
+

@@ -9,5 +9,10 @@ class groupes_preparation_brief extends Model
 {
     use HasFactory;
     protected $table = "groupes_preparation_brief";
+    public $timestamps= false;
+    protected $fillable = [
+    "Apprenant_preparation_brief_id",
+    "Groupe_id"
 
+    ];
 }

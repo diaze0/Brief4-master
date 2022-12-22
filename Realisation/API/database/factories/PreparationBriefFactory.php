@@ -4,20 +4,21 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\preparation_brief>
- */
+use \App\Models\preparationBrief;
+use \App\Models\formateur;
+
 class PreparationBriefFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
+    protected $model=preparationBrief::class;
     public function definition()
     {
+        $formateur =formateur::all()->pluck('id')->toArray();
         return [
-            //
+            "Nom_du_brief"=>$this->faker->name(),
+            "Description"=>$this->faker->word() ,
+            "Duree"=>$this->faker->dateTime(),
+            "Formateur_id"=>$this->faker->randomElement($formateur),
         ];
     }
 }
